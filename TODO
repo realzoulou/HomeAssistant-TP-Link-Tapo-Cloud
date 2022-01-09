@@ -1,0 +1,3 @@
+(A) 2022-01-09 Add support for discovering all supported devices from given user credentials, with 'host' then becoming optional or not needed at all
+(A) 2022-01-09 Add a logo for the integration
+(B) 2022-01-09 Add support for 'switch' and 'light' platforms

@@ -1,0 +1,24 @@
+{
+    "config": {
+        "flow_title": "{name}",
+        "step": {
+            "user": {
+                "title": "Setup up your TP-Link Tapo device",
+                "description": "Enter your TP-Link cloud credentials and hostname or IP address of a Tapo device",
+                "data": {
+                    "username": "E-mail/Username",
+                    "password": "Password",
+                    "host": "Hostname or IP address of Tapo device"
+                }
+            }
+        },
+        "error": {
+            "invalid_host": "Invalid hostname or IP address",
+            "invalid_username": "Invalid e-mail/username",
+            "cannot_connect": "Failed to connect to cloud/device",
+            "invalid_auth": "Invalid authentication",
+            "cannot_communicate": "Failed to communicate with cloud/device",
+            "unknown_error": "Unknown error"
+        }
+    }
+}

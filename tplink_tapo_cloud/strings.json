@@ -1,0 +1,24 @@
+{
+    "config": {
+        "flow_title": "{name}",
+        "step": {
+            "user": {
+                "title": "Setup up your TP-Link Tapo device",
+                "description": "Enter hostname or IP address of your Tapo device and your TP-Link cloud credentials.",
+                "data": {
+                    "username": "[%key:common::config_flow::data::username%]",
+                    "password": "[%key:common::config_flow::data::password%]",
+                    "host": "[%key:common::config_flow::data::host%]"
+                }
+            }
+        },
+        "error": {
+            "invalid_host": "[%key:common::config_flow::error::invalid_host%]",
+            "invalid_username": "[%key:common::config_flow::error::invalid_username%]",
+            "cannot_connect": "[%key:common::config_flow::error::cannot_connect%]",
+            "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
+            "cannot_communicate": "[%key:common::config_flow::error::cannot_communicate%]",
+            "unknown_error": "[%key:common::config_flow::error::unknown_error%]"
+        }
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "domain": "tplink_tapo_cloud",
+    "name": "TP-Link Tapo Cloud",
+    "documentation": "https://github.com/realzoulou/HomeAssistant-TP-Link-Tapo-Cloud",
+    "issue_tracker": "https://github.com/realzoulou/HomeAssistant-TP-Link-Tapo-Cloud/issues",
+    "dependencies": [],
+    "codeowners": [
+        "@realzoulou"
+    ],
+    "requirements": [
+        "PyP100==0.0.16"
+    ],
+    "iot_class": "cloud_polling",
+    "config_flow": true,
+    "version": "1.0.0"
+}
