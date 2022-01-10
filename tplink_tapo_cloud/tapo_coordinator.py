@@ -2,10 +2,8 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from base64 import b64decode
-import json
 import logging
-from typing import Any
+from typing import Any, Final
 import async_timeout
 
 
@@ -59,8 +57,8 @@ class TapoDataUpdateCoordinator(DataUpdateCoordinator):
     async def _async_update_data(self):
         """Update data via PyPI library."""
 
-        data: dict[str, Any] = {}
         try:
+            data: dict[str, Any] = {}
             async with async_timeout.timeout(10):
                 # Note: asyncio.TimeoutError and aiohttp.ClientError are already
                 # handled by the DataUpdateCoordinator base class.
@@ -76,30 +74,27 @@ class TapoDataUpdateCoordinator(DataUpdateCoordinator):
                     )
                     self._connected = True # omit handshake/loging until any error occurs
 
+                # get device name
+                device_name: Final[str] = await self._hass.async_add_executor_job(
+                    self._p1xx.getDeviceName
+                )
+                data[COORDINATOR_DATA_KEY_NAME] = device_name
+
                 # get device info
-                device_info = await self._hass.async_add_executor_job(
+                device_info: Final[dict[str, Any]] = await self._hass.async_add_executor_job(
                     self._p1xx.getDeviceInfo
                 )
                 if _LOGGER.isEnabledFor(logging.DEBUG):
                     _LOGGER.debug("getDeviceInfo: %s", device_info)
-
-                # TODO: avoid code duplication
-                # depends on https://github.com/fishbigger/TapoP100/issues/41
-                nickname: str = device_info["result"]["nickname"]
-                nickname = b64decode(nickname)
-                nickname = nickname.decode("utf-8")
-                data[COORDINATOR_DATA_KEY_NAME] = nickname
                 data[COORDINATOR_DATA_KEY_DEVICEINFO] = device_info["result"]
 
                 if isinstance(self._p1xx, PyP110.P110):
                     # Only query energy usage, if it is confirmed to be a P110 plug
-                    energy_usage = await self._hass.async_add_executor_job(
+                    energy_usage: Final[dict[str, Any]] = await self._hass.async_add_executor_job(
                         self._p1xx.getEnergyUsage
                     )
                     if _LOGGER.isEnabledFor(logging.DEBUG):
-                        dump = json.dumps(energy_usage, sort_keys=True)
-                        _LOGGER.debug("getEnergyUsage: %s", dump)
-                    energy_usage = json.loads(energy_usage)
+                        _LOGGER.debug("getEnergyUsage: %s", energy_usage)
                     data[COORDINATOR_DATA_KEY_ENERGY] = energy_usage["result"]
 
                 # return data to DataUpdateCoordinator,
@@ -111,14 +106,10 @@ class TapoDataUpdateCoordinator(DataUpdateCoordinator):
         except Exception as err: # pylint: disable=broad-except
             _LOGGER.warning("_async_update_data: Exception: %s", err)
             self._connected = False # repeat handshake/login
-            # wipe any previous data
-            data = {}
             # Force CoordinatorEntity to forget any previous data
             self.data = {}
             # UpdateFailed will trigger HA to do retries
             raise UpdateFailed from err
-
-        return data
 
     @property
     def unique_id(self) -> str | None:

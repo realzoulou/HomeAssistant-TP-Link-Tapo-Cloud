@@ -1,9 +1,7 @@
 """Config flow for TP-Link Tapo integration."""
 
 from __future__ import annotations
-from base64 import b64decode
 
-import json
 import logging
 from typing import Any, Dict, Final
 import voluptuous as vol
@@ -86,14 +84,13 @@ async def validate_input(hass: HomeAssistant, data: dict) -> dict[str, Any]:
         raise InvalidAuth from err
 
     # Retrieve device name
-    # uncomment once https://github.com/fishbigger/TapoP100/issues/41 is fixed
-    #try:
-    #name: Final[str] = await hass.async_add_executor_job(
-    #    p100.getDeviceName
-    #)
-    #except Exception as err: # pylint: disable=broad-except
-    #    _LOGGER.error("validate_input: getDeviceName Exception: %s", err)
-    #    raise CannotCommunicate from err
+    try:
+        device_name: Final[str] = await hass.async_add_executor_job(
+            p100.getDeviceName
+        )
+    except Exception as err: # pylint: disable=broad-except
+        _LOGGER.warning("validate_input: getDeviceName Exception: %s", err)
+        raise CannotCommunicate from err
 
     # Retrieve device model
     try:
@@ -101,12 +98,6 @@ async def validate_input(hass: HomeAssistant, data: dict) -> dict[str, Any]:
             p100.getDeviceInfo
         )
         device_model: Final[str] = device_info["result"]["model"]
-        # Code duplication due to https://github.com/fishbigger/TapoP100/issues/41
-        nickName: str = device_info["result"]["nickname"]
-        nickName = b64decode(nickName)
-        device_name: Final[str] = nickName.decode("utf-8")
-
-
     except Exception as err: # pylint: disable=broad-except
         _LOGGER.warning("validate_input: getDeviceInfo Exception: %s", err)
         raise CannotCommunicate from err
