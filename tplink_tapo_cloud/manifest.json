@@ -8,7 +8,7 @@
         "@realzoulou"
     ],
     "requirements": [
-        "PyP100==0.0.17"
+        "PyP100==0.0.18"
     ],
     "iot_class": "cloud_polling",
     "config_flow": true,
