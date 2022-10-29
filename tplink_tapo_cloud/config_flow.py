@@ -59,7 +59,7 @@ async def validate_input(hass: HomeAssistant, data: dict) -> dict[str, Any]:
         )
         _LOGGER.debug("getDeviceList: %s", device_list)
     except Exception as err: # pylint: disable=broad-except
-        _LOGGER.warning("validate_input: getDeviceList Exception: %s", err)
+        _LOGGER.exception("validate_input: getDeviceList Exception: %s", err)
         # not raising any Exception
 
     # Setting up a test connection with device/cloud
@@ -71,7 +71,7 @@ async def validate_input(hass: HomeAssistant, data: dict) -> dict[str, Any]:
             p100.handshake
         )
     except Exception as err: # pylint: disable=broad-except
-        _LOGGER.warning("validate_input: handshake Exception: %s", err)
+        _LOGGER.exception("validate_input: handshake Exception: %s", err)
         raise CannotConnect from err
 
     # Send credentials to the plug and create AES Key and IV for further methods
@@ -80,7 +80,7 @@ async def validate_input(hass: HomeAssistant, data: dict) -> dict[str, Any]:
             p100.login
         )
     except Exception as err: # pylint: disable=broad-except
-        _LOGGER.warning("validate_input: login Exception: %s", err)
+        _LOGGER.exception("validate_input: login Exception: %s", err)
         raise InvalidAuth from err
 
     # Retrieve device name
@@ -89,7 +89,7 @@ async def validate_input(hass: HomeAssistant, data: dict) -> dict[str, Any]:
             p100.getDeviceName
         )
     except Exception as err: # pylint: disable=broad-except
-        _LOGGER.warning("validate_input: getDeviceName Exception: %s", err)
+        _LOGGER.exception("validate_input: getDeviceName Exception: %s", err)
         raise CannotCommunicate from err
 
     # Retrieve device model
@@ -99,7 +99,7 @@ async def validate_input(hass: HomeAssistant, data: dict) -> dict[str, Any]:
         )
         device_model: Final[str] = device_info["result"]["model"]
     except Exception as err: # pylint: disable=broad-except
-        _LOGGER.warning("validate_input: getDeviceInfo Exception: %s", err)
+        _LOGGER.exception("validate_input: getDeviceInfo Exception: %s", err)
         raise CannotCommunicate from err
 
     # Return device_name with key 'title', User will see this string in success dialog.
