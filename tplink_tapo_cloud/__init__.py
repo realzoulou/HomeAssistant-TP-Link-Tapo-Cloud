@@ -73,8 +73,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.data[DOMAIN][entry.entry_id] = coordinator
 
     # This creates each HA object for each platform the device requires.
-    # It's done by calling the `async_setup_entry` function in each platform module.
-    hass.config_entries.async_setup_platforms(entry, PLATFORMS)
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     _LOGGER.debug("async_setup_entry:exit: entry.entry_id=%s", entry.entry_id)
     return True
