@@ -33,13 +33,13 @@ class TapoDataUpdateCoordinator(DataUpdateCoordinator):
         hass: HomeAssistant,
         p1xx: PyP100.P100 | PyP110.P110,
         interval: timedelta,
-        config_entry_unique_id: str,
+        config_entry_id: str,
     ) -> None:
         """Initialize."""
 
         self._hass = hass
         self._p1xx = p1xx
-        self._config_entry_unique_id = config_entry_unique_id
+        self._config_entry_id = config_entry_id
 
         self._connected = False
 
@@ -114,7 +114,7 @@ class TapoDataUpdateCoordinator(DataUpdateCoordinator):
     @property
     def unique_id(self) -> str | None:
         """Return a unique_id."""
-        return self._config_entry_unique_id
+        return self._config_entry_id
 
     @property
     def device_info(self) -> DeviceInfo | None:
@@ -130,10 +130,10 @@ class TapoDataUpdateCoordinator(DataUpdateCoordinator):
 
         return DeviceInfo(
             identifiers = {(DOMAIN, device_unique_id)},
-            default_name = device_name,
-            default_manufacturer = MANUFACTURER,
-            default_model = device_model,
+            name = device_name,
+            manufacturer = MANUFACTURER,
+            model = device_model,
             sw_version = device_fw_version,
-            via_device = (DOMAIN, self._config_entry_unique_id),
+            via_device = (DOMAIN, self._config_entry_id),
             configuration_url = TAPOCLOUD_URL
         )

@@ -57,7 +57,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         hass,
         p1xx,
         interval = SCAN_INTERVAL,
-        config_entry_unique_id = entry.unique_id
+        config_entry_id = entry.entry_id
     )
 
     # Fetch initial data so we have data when entities subscribe
