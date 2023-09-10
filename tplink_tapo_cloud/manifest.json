@@ -1,6 +1,6 @@
 {
     "domain": "tplink_tapo_cloud",
-    "name": "TP-Link Tapo Cloud",
+    "name": "TP-Link Tapo",
     "documentation": "https://github.com/realzoulou/HomeAssistant-TP-Link-Tapo-Cloud",
     "issue_tracker": "https://github.com/realzoulou/HomeAssistant-TP-Link-Tapo-Cloud/issues",
     "dependencies": [],
@@ -12,5 +12,7 @@
     ],
     "iot_class": "local_polling",
     "config_flow": true,
-    "version": "2.0.0"
+    "version": "2.0.0",
+    "ssdp": [],
+    "zeroconf": []
 }
