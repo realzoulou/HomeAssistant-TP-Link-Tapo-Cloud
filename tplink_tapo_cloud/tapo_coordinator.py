@@ -65,13 +65,13 @@ class TapoDataUpdateCoordinator(DataUpdateCoordinator):
 
                 if self._connected is False:
                     # Create the cookies required for further methods
-                    await self._hass.async_add_executor_job(
-                        self._p1xx.handshake
-                    )
+                    #await self._hass.async_add_executor_job(
+                    #    self._p1xx.handshake
+                    #)
                     # Send credentials to the plug and create AES Key and IV for further methods
-                    await self._hass.async_add_executor_job(
-                        self._p1xx.login
-                    )
+                    #await self._hass.async_add_executor_job(
+                    #    self._p1xx.login
+                    #)
                     self._connected = True # omit handshake/loging until any error occurs
 
                 # get device name
@@ -86,7 +86,7 @@ class TapoDataUpdateCoordinator(DataUpdateCoordinator):
                 )
                 if _LOGGER.isEnabledFor(logging.DEBUG):
                     _LOGGER.debug("getDeviceInfo: %s", device_info)
-                data[COORDINATOR_DATA_KEY_DEVICEINFO] = device_info["result"]
+                data[COORDINATOR_DATA_KEY_DEVICEINFO] = device_info
 
                 if isinstance(self._p1xx, PyP110.P110):
                     # Only query energy usage, if it is confirmed to be a P110 plug
@@ -95,7 +95,7 @@ class TapoDataUpdateCoordinator(DataUpdateCoordinator):
                     )
                     if _LOGGER.isEnabledFor(logging.DEBUG):
                         _LOGGER.debug("getEnergyUsage: %s", energy_usage)
-                    data[COORDINATOR_DATA_KEY_ENERGY] = energy_usage["result"]
+                    data[COORDINATOR_DATA_KEY_ENERGY] = energy_usage
 
                 # return data to DataUpdateCoordinator,
                 # where it is accessible via 'coordinator.data'
@@ -104,7 +104,7 @@ class TapoDataUpdateCoordinator(DataUpdateCoordinator):
             _LOGGER.debug("_async_update_data: timeout")
 
         except Exception as err: # pylint: disable=broad-except
-            _LOGGER.warning("_async_update_data: Exception: %s", err)
+            _LOGGER.exception("_async_update_data: Exception: %s", err)
             self._connected = False # repeat handshake/login
             # Force CoordinatorEntity to forget any previous data
             self.data = {}

@@ -66,13 +66,13 @@ async def validate_input(hass: HomeAssistant, data: dict) -> dict[str, Any]:
     p100: Final = PyP100.P100(host, login, password)
 
     # Create the cookies required for further methods
-    try:
-        await hass.async_add_executor_job(
-            p100.handshake
-        )
-    except Exception as err: # pylint: disable=broad-except
-        _LOGGER.exception("validate_input: handshake Exception: %s", err)
-        raise CannotConnect from err
+    #try:
+    #    await hass.async_add_executor_job(
+    #        p100.handshake
+    #    )
+    #except Exception as err: # pylint: disable=broad-except
+    #    _LOGGER.exception("validate_input: handshake Exception: %s", err)
+    #    raise CannotConnect from err
 
     # Send credentials to the plug and create AES Key and IV for further methods
     try:
@@ -97,7 +97,7 @@ async def validate_input(hass: HomeAssistant, data: dict) -> dict[str, Any]:
         device_info: str = await hass.async_add_executor_job(
             p100.getDeviceInfo
         )
-        device_model: Final[str] = device_info["result"]["model"]
+        device_model: Final[str] = device_info["model"]
     except Exception as err: # pylint: disable=broad-except
         _LOGGER.exception("validate_input: getDeviceInfo Exception: %s", err)
         raise CannotCommunicate from err

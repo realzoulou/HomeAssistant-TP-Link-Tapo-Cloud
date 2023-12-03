@@ -8,7 +8,6 @@
         "@realzoulou"
     ],
     "requirements": [
-        "PyP100==0.1.2"
     ],
     "iot_class": "local_polling",
     "config_flow": true,
